@@ -1,0 +1,179 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<!-- navbar starts -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">PYPROJECTGAMES</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Все продукты</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/brands" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+            Бренды
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for brand in brands %}
+            <a class="dropdown-item" href="{{ url_for('get_brand', id=brand.id) }}">{{brand.name}}</a>
+            {% endfor %}
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/categories" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+            Категории
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for category in categories %}
+            <a class="dropdown-item" href="{{ url_for('get_category', id=category.id) }}">{{category.name}}</a>
+            {% endfor %}
+          </div>
+        </li>
+
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Например: Телефон" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Поиск</button>
+      </form>
+    </div>
+  </div>
+</nav>
+<!-- navbar ends -->
+
+<div class="container">
+  <div class="row">
+    {% if brand %}
+     {% for b in brand.items %}
+    <div class="col-md-3 col-sm-4 mt-3">
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/' + b.image_1) }}" alt="{{ b.name }}" class='card-img-top' height="200">
+        <div class="card-body">
+          {% if b.discount > 0 %}
+          <p style="text-shadow: 1px 1px 2px #000; color: #f00; transform: rotate(-15deg);">Скидка: {{ b.discount }}%</p>
+          {% endif %}
+          <h5 class="text-center">{{ b.name }}</h5>
+          <p class="text-center">{{ b.price }}₽</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
+          <a href="#" class="float-right btn btn-sm btn-warning m-2">Добавить в корзину</a>
+        </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="row">
+  <div class="col text-center">
+    {% if brand.has_prev %}
+    <a href="{{ url_for('get_brand',id=get_br.id, page=brand.prev_num) }}" class="btn btn-sm btn-outline-primary m-2">Предыдущая</a>
+    {% endif %}
+    {% for page_num in brand.iter_pages() %}
+      {% if page_num %}
+        {% if brand.page == page_num %}
+          <a href="{{ url_for('get_brand',id=get_br.id ,page=page_num) }}" class="btn btn-sm btn-primary m-2">{{page_num}}</a>
+        {% else %}
+          <a href="{{ url_for('get_brand', id=get_br.id,page=page_num) }}" class="btn btn-sm btn-outline-primary m-2">{{page_num}}</a>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    {% if brand.has_next %}
+    <a href="{{ url_for('get_brand', id=get_br.id,page=brand.next_num) }}" class="btn btn-sm btn-outline-primary m-2">Следующая</a>
+    {% endif %}
+    </div>
+</div>
+
+
+<div class="row">
+   {% elif category %}
+    {% for c in category.items %}
+    <div class="col-md-3 col-sm-4 mt-3">
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/' + c.image_1) }}" alt="{{ c.name }}" class='card-img-top' height="200">
+        <div class="card-body">
+          {% if c.discount > 0 %}
+          <p style="text-shadow: 1px 1px 2px #000; color: #f00; transform: rotate(-15deg);">Скидка: {{ c.discount }}%</p>
+          {% endif %}
+          <h5 class="text-center">{{ c.name }}</h5>
+          <p class="text-center">{{ c.price }}₽</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
+          <a href="#" class="float-right btn btn-sm btn-warning m-2">Добавить в корзину</a>
+        </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+  <div class="row">
+  <div class="col text-center">
+    {% if category.has_prev %}
+    <a href="{{ url_for('get_category',id=get_cat.id, page=category.prev_num) }}" class="btn btn-sm btn-outline-primary m-2">Предыдущая</a>
+    {% endif %}
+    {% for page_num in category.iter_pages() %}
+      {% if page_num %}
+        {% if category.page == page_num %}
+          <a href="{{ url_for('get_category',id=get_cat.id ,page=page_num) }}" class="btn btn-sm btn-primary m-2">{{page_num}}</a>
+        {% else %}
+          <a href="{{ url_for('get_category', id=get_cat.id,page=page_num) }}" class="btn btn-sm btn-outline-primary m-2">{{page_num}}</a>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    {% if category.has_next %}
+    <a href="{{ url_for('get_category', id=get_cat.id,page=category.next_num) }}" class="btn btn-sm btn-outline-primary m-2">Следующая</a>
+    {% endif %}
+    </div>
+</div>
+
+
+  {% else %}
+<div class="row">
+    {% for product in products.items %}
+    <div class="col-sm-6 col-md-3 col-xl-3 mt-3">
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/' + product.image_1) }}" alt="{{ product.name }}" class='card-img-top' height="200">
+        <div class="card-body">
+          {% if product.discount > 0 %}
+          <p style="text-shadow: 1px 1px 2px #000; color: #f00; transform: rotate(-15deg);">Скидка: {{ product.discount }}%</p>
+          {% endif %}
+          <h5 class="text-center">{{ product.name }}</h5>
+          <p class="text-center">{{ product.price }}₽</p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
+          <a href="#" class="float-right btn btn-sm btn-warning m-2">Добавить в корзину</a>
+        </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+<div class="row">
+  <div class="col text-center">
+    {% if products.has_prev %}
+    <a href="{{ url_for('home', page=products.prev_num) }}" class="btn btn-sm btn-outline-primary m-2">Предыдущая</a>
+    {% endif %}
+    {% for page_num in products.iter_pages() %}
+    {% if page_num %}
+    {% if products.page == page_num %}
+      <a href="{{ url_for('home', page=page_num) }}" class="btn btn-sm btn-primary m-2">{{page_num}}</a>
+    {% else %}
+      <a href="{{ url_for('home', page=page_num) }}" class="btn btn-sm btn-outline-primary m-2">{{page_num}}</a>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% if products.has_next %}
+    <a href="{{ url_for('home', page=products.next_num) }}" class="btn btn-sm btn-outline-primary m-2">Следующая</a>
+    {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+
+
+{% endblock content %}
