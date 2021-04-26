@@ -15,6 +15,12 @@ def home():
     return render_template('products/index.html', products=products, brands=brands, categories=categories)
 
 
+@app.route('/product/<int:id>')
+def single_page(id):
+    product = Product.query.get_or_404(id)
+    return render_template('products/single_page.html', product=product)
+
+
 @app.route('/brand/<int:id>')
 def get_brand(id):
     page = request.args.get('page', 1, type=int)
@@ -45,8 +51,10 @@ def addbrand():
         brand = Brand(name=getbrand)
         db.session.add(brand)
         db.session.commit()
-        flash(f'The Category {getbrand} was added to your database.', 'success')
-    return render_template('products/addbrand.html')
+        flash(f'The Brand {getbrand} was added to your database.', 'success')
+        return redirect(url_for('addbrand'))
+
+    return render_template('products/addbrand.html', brands='brands')
 
 
 @app.route('/updatebrand/<int:id>', methods=["GET", 'POST'])
@@ -92,7 +100,7 @@ def addcategory():
         flash(f'The Category {getcategory} was added to your database.', 'success')
         return redirect(url_for('addcategory'))
 
-    return render_template('products/addbrand.html')
+    return render_template('products/addbrand.html', brands='categories')
 
 
 @app.route('/addproduct', methods=["POST", "GET"])

@@ -61,7 +61,7 @@
           <p class="text-center">{{ b.price }}₽</p>
         </div>
         <div class="card-footer">
-          <a href="#" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
+          <a href="{{ url_for('single_page', id=b.id) }}" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
           <a href="#" class="float-right btn btn-sm btn-warning m-2">Добавить в корзину</a>
         </div>
         </div>
@@ -103,7 +103,7 @@
           <p class="text-center">{{ c.price }}₽</p>
         </div>
         <div class="card-footer">
-          <a href="#" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
+          <a href="{{ url_for('single_page', id=c.id) }}" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
           <a href="#" class="float-right btn btn-sm btn-warning m-2">Добавить в корзину</a>
         </div>
         </div>
@@ -145,7 +145,7 @@
           <p class="text-center">{{ product.price }}₽</p>
         </div>
         <div class="card-footer">
-          <a href="#" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
+          <a href="{{ url_for('single_page', id=product.id) }}" class="float-left btn btn-sm btn-primary m-2">Инфо</a>
           <a href="#" class="float-right btn btn-sm btn-warning m-2">Добавить в корзину</a>
         </div>
         </div>
